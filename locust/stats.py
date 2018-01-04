@@ -16,7 +16,7 @@ STATS_NAME_WIDTH = 60
 
 """Default interval for how frequently the CSV file is written if this option
 is configured."""
-CSV_STATS_INTERVAL_SEC = 2
+CSV_STATS_INTERVAL_SEC = 60
 
 """Default interval for how frequently results are written to console."""
 CONSOLE_STATS_INTERVAL_SEC = 2
@@ -664,10 +664,10 @@ def stats_writer(base_filepath):
 
 def write_stat_csvs(base_filepath):
     """Writes the requests and distribution csvs."""
-    with open(base_filepath + '_requests.csv', "w") as f:
+    with open(base_filepath + '_requests.csv', "a") as f:
         f.write(requests_csv())
 
-    with open(base_filepath + '_distribution.csv', 'w') as f:
+    with open(base_filepath + '_distribution.csv', 'a') as f:
         f.write(distribution_csv())
 
 
