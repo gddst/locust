@@ -16,10 +16,10 @@ STATS_NAME_WIDTH = 60
 
 """Default interval for how frequently the CSV file is written if this option
 is configured."""
-CSV_STATS_INTERVAL_SEC = 60
+CSV_STATS_INTERVAL_SEC = 10
 
 """Default interval for how frequently results are written to console."""
-CONSOLE_STATS_INTERVAL_SEC = 2
+CONSOLE_STATS_INTERVAL_SEC = 10
 
 """
 Default window size/resolution - in seconds - when calculating the current 
