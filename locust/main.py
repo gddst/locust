@@ -16,7 +16,7 @@ from .core import HttpLocust, Locust
 from .inspectlocust import get_task_ratio_dict, print_task_ratio
 from .log import console_logger, setup_logging
 from .runners import LocalLocustRunner, MasterLocustRunner, SlaveLocustRunner
-from .stats import (print_error_report, print_percentile_stats, print_stats,
+from .stats import (print_error_report, write_error_report, print_percentile_stats, print_stats,
                     stats_printer, stats_writer, write_stat_csvs)
 from .util.time import parse_timespan
 
@@ -502,6 +502,8 @@ def main():
         if options.csvfilebase:
             write_stat_csvs(options.csvfilebase)
         print_error_report()
+        if options.csvfilebase:
+            write_error_report(options.csvfilebase)
         sys.exit(code)
     
     # install SIGTERM handler

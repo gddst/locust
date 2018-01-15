@@ -649,6 +649,22 @@ def print_error_report():
     console_logger.info("-" * (80 + STATS_NAME_WIDTH))
     console_logger.info("")
 
+
+def write_error_report(base_filepath):
+    """Writes the error report."""
+    if not len(global_stats.errors):
+        return
+
+    with open(base_filepath + '_error.csv', "a") as f:
+        f.write("Error report\n")
+        f.write(" %-18s %-100s" % ("# occurrences", "Error") + "\n")
+        f.write("-" * (80 + STATS_NAME_WIDTH) + "\n")
+        for error in six.itervalues(global_stats.errors):
+            f.write(" %-18i %-100s" % (error.occurences, error.to_name()) + "\n")
+        f.write("-" * (80 + STATS_NAME_WIDTH) + "\n")
+        f.write("")
+
+
 def stats_printer():
     from . import runners
     while True:
