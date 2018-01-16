@@ -655,7 +655,7 @@ def write_error_report(base_filepath):
     if not len(global_stats.errors):
         return
 
-    with open(base_filepath + '_error.csv', "a") as f:
+    with open(base_filepath + '_error.log', "a") as f:
         f.write("Error report\n")
         f.write(" %-18s %-100s" % ("# occurrences", "Error") + "\n")
         f.write("-" * (80 + STATS_NAME_WIDTH) + "\n")
