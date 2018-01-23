@@ -751,6 +751,7 @@ def distribution_csv():
         if s.num_requests:
             rows.append(s.percentile(tpl='"%s","%s",%i,%i,%i,%i,%i,%i,%i,%i,%i,%i'))
         else:
-            rows.append('"%s",0,"N/A","N/A","N/A","N/A","N/A","N/A","N/A","N/A","N/A"' % s.name)
+            current_time = time.strftime('%H:%M:%S', time.localtime(time.time()))
+            rows.append('"%s","%s",0,"N/A","N/A","N/A","N/A","N/A","N/A","N/A","N/A","N/A"' % (s.name, current_time))
 
     return "\n".join(rows) + "\n"
