@@ -452,6 +452,7 @@ class StatsEntry(object):
         
         return tpl % (
             (self.method and self.method + " " or "") + self.name,
+            time.strftime('%H:%M:%S', time.localtime(time.time())),
             self.num_requests,
             self.get_response_time_percentile(0.5),
             self.get_response_time_percentile(0.66),
@@ -699,6 +700,7 @@ def requests_csv():
         ",".join([
             '"Method"',
             '"Name"',
+            '"time"',
             '"# requests"',
             '"# failures"',
             '"Median response time"',
@@ -709,11 +711,12 @@ def requests_csv():
             '"Requests/s"',
         ])
     ]
-
+    current_time = time.strftime('%H:%M:%S', time.localtime(time.time()))
     for s in chain(sort_stats(runners.locust_runner.request_stats), [runners.locust_runner.stats.total]):
-        rows.append('"%s","%s",%i,%i,%i,%i,%i,%i,%i,%.2f' % (
+        rows.append('"%s","%s","%s",%i,%i,%i,%i,%i,%i,%i,%.2f' % (
             s.method,
             s.name,
+            current_time,
             s.num_requests,
             s.num_failures,
             s.median_response_time,
@@ -731,6 +734,7 @@ def distribution_csv():
 
     rows = [",".join((
         '"Name"',
+        '"time"',
         '"# requests"',
         '"50%"',
         '"66%"',
@@ -742,9 +746,10 @@ def distribution_csv():
         '"99%"',
         '"100%"',
     ))]
+
     for s in chain(sort_stats(runners.locust_runner.request_stats), [runners.locust_runner.stats.total]):
         if s.num_requests:
-            rows.append(s.percentile(tpl='"%s",%i,%i,%i,%i,%i,%i,%i,%i,%i,%i'))
+            rows.append(s.percentile(tpl='"%s","%s",%i,%i,%i,%i,%i,%i,%i,%i,%i,%i'))
         else:
             rows.append('"%s",0,"N/A","N/A","N/A","N/A","N/A","N/A","N/A","N/A","N/A"' % s.name)
 
