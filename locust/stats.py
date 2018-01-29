@@ -452,6 +452,29 @@ class StatsEntry(object):
         
         return tpl % (
             (self.method and self.method + " " or "") + self.name,
+            self.num_requests,
+            self.get_response_time_percentile(0.5),
+            self.get_response_time_percentile(0.66),
+            self.get_response_time_percentile(0.75),
+            self.get_response_time_percentile(0.80),
+            self.get_response_time_percentile(0.90),
+            self.get_response_time_percentile(0.95),
+            self.get_response_time_percentile(0.98),
+            self.get_response_time_percentile(0.99),
+            self.get_response_time_percentile(1.00)
+        )
+
+    def percentile_resbot(self, tpl=" %-" + str(STATS_NAME_WIDTH) + "s %8d %6d %6d %6d %6d %6d %6d %6d %6d %6d"):
+        """
+        Added a timestamp column for resbot
+        :param tpl:
+        :return:
+        """
+        if not self.num_requests:
+            raise ValueError("Can't calculate percentile on url with no successful requests")
+
+        return tpl % (
+            (self.method and self.method + " " or "") + self.name,
             time.strftime('%H:%M:%S', time.localtime(time.time())),
             self.num_requests,
             self.get_response_time_percentile(0.5),
@@ -464,7 +487,7 @@ class StatsEntry(object):
             self.get_response_time_percentile(0.99),
             self.get_response_time_percentile(1.00)
         )
-    
+
     def _cache_response_times(self, t):
         self.response_times_cache[t] = CachedResponseTimes(
             response_times=copy(self.response_times),
@@ -749,9 +772,10 @@ def distribution_csv():
 
     for s in chain(sort_stats(runners.locust_runner.request_stats), [runners.locust_runner.stats.total]):
         if s.num_requests:
-            rows.append(s.percentile(tpl='"%s","%s",%i,%i,%i,%i,%i,%i,%i,%i,%i,%i'))
+            rows.append(s.percentile_resbot(tpl='"%s","%s",%i,%i,%i,%i,%i,%i,%i,%i,%i,%i'))
         else:
             current_time = time.strftime('%H:%M:%S', time.localtime(time.time()))
             rows.append('"%s","%s",0,"N/A","N/A","N/A","N/A","N/A","N/A","N/A","N/A","N/A"' % (s.name, current_time))
 
     return "\n".join(rows) + "\n"
+
